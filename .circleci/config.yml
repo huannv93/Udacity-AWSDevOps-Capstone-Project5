@@ -167,8 +167,6 @@ jobs:
         # auth:
         #   username: $DOCKER_USER
         #   password: $DOCKER_PASS
-    environment:
-      SHORT_GIT_HASH: $(echo $CIRCLE_SHA1 | cut -c -7)
     steps:
       - checkout
       - setup_remote_docker
@@ -190,10 +188,10 @@ jobs:
             
             if [ "${CIRCLE_BRANCH}" == "main" ]; then
               echo "$DOCKER_PASS" | docker login --username $DOCKER_USER --password $DOCKER_PASS
-              docker tag huannv93/udacity-awsdevops-project03-1_frontend "huannv93/udacity-awsdevops-project03-1_frontend:$SHORT_GIT_HASH"
-              docker tag huannv93/udacity-awsdevops-project03-1_backend "huannv93/udacity-awsdevops-project03-1_backend:$SHORT_GIT_HASH"
-              docker push "huannv93/udacity-awsdevops-project03-1_frontend:$SHORT_GIT_HASH"
-              docker push "huannv93/udacity-awsdevops-project03-1_backend:$SHORT_GIT_HASH"
+              docker tag huannv93/udacity-awsdevops-project03-1_frontend "huannv93/udacity-awsdevops-project03-1_frontend:${CIRCLE_SHA1: -7}"
+              docker tag huannv93/udacity-awsdevops-project03-1_backend "huannv93/udacity-awsdevops-project03-1_backend:${CIRCLE_SHA1: -7}"
+              docker push "huannv93/udacity-awsdevops-project03-1_frontend:${CIRCLE_SHA1: -7}"
+              docker push "huannv93/udacity-awsdevops-project03-1_backend:${CIRCLE_SHA1: -7}"
             fi
 
 
