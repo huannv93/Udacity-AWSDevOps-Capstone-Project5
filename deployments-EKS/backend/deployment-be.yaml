@@ -28,14 +28,70 @@ spec:
       
       containers:
       - name: be
-        image: huannv93/udacity-awsdevops-project03-1_backend
-        resources:
-          requests:
-            cpu: 500m
+        image: huannv93/udacity-awsdevops-project03-1_backend:126
+        # resources:
+        #   requests:
+        #     cpu: 500m       
         ports:
         - name: http
           containerPort: 3030
         imagePullPolicy: IfNotPresent
+        env:
+         - name: NODE_ENV
+           valueFrom:
+             configMapKeyRef:
+               name: myconfigmap
+               key: NODE_ENV
+         - name: VERSION
+           valueFrom:
+             configMapKeyRef:
+               name: myconfigmap
+               key: VERSION
+         - name: TYPEORM_CONNECTION
+           valueFrom:
+             configMapKeyRef:
+               name: myconfigmap
+               key: TYPEORM_CONNECTION
+         - name: TYPEORM_MIGRATIONS_DIR
+           valueFrom:
+             configMapKeyRef:
+               name: myconfigmap
+               key: TYPEORM_MIGRATIONS_DIR
+         - name: TYPEORM_ENTITIES
+           valueFrom:
+             configMapKeyRef:
+               name: myconfigmap
+               key: TYPEORM_ENTITIES
+         - name: TYPEORM_MIGRATIONS
+           valueFrom:
+             configMapKeyRef:
+               name: myconfigmap
+               key: TYPEORM_MIGRATIONS
+         - name: TYPEORM_HOST
+           valueFrom:
+             configMapKeyRef:
+               name: myconfigmap
+               key: TYPEORM_HOST
+         - name: TYPEORM_PORT
+           valueFrom:
+             configMapKeyRef:
+               name: myconfigmap
+               key: TYPEORM_PORT
+         - name: TYPEORM_USERNAME
+           valueFrom:
+             configMapKeyRef:
+               name: myconfigmap
+               key: TYPEORM_USERNAME
+         - name: TYPEORM_PASSWORD
+           valueFrom:
+             configMapKeyRef:
+               name: myconfigmap
+               key: TYPEORM_PASSWORD      
+         - name: TYPEORM_DATABASE
+           valueFrom:
+             configMapKeyRef:
+               name: myconfigmap
+               key: TYPEORM_DATABASE        
       nodeSelector:
         kubernetes.io/os: linux
 ---
