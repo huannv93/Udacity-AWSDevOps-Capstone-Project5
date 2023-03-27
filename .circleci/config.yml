@@ -164,11 +164,12 @@ jobs:
   images-build:
     docker:
       - image: docker:17.05.0-ce-git
-        # auth:
-        #   username: huannv93
-        #   password: $DOCKERHUB_PASSWORD
+        auth:
+          username: $DOCKER_USER
+          password: $DOCKER_PASS
     steps:
       - checkout
+      - setup_remote_docker
       - run:
           name: Install dependencies
           command: |
