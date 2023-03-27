@@ -1,5 +1,5 @@
 # base image
-FROM circleci/root:13.8.0
+FROM circleci/node:13.8.0
 USER root
 # set working directory
 RUN sudo mkdir -p /usr/src/app
