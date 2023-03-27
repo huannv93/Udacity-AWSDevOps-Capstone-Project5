@@ -164,9 +164,9 @@ jobs:
   images-build:
     docker:
       - image: docker:17.05.0-ce-git
-        auth:
-          username: $DOCKER_USER
-          password: $DOCKER_PASS
+        # auth:
+        #   username: $DOCKER_USER
+        #   password: $DOCKER_PASS
     steps:
       - checkout
       - setup_remote_docker
