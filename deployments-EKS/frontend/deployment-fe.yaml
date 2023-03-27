@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-deployment
+  namespace: eks-udacity-app
+  labels:
+    app: eks-udacity-app-fe
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app:  eks-udacity-app-fe
+  template:
+    metadata:
+      labels:
+        app: eks-udacity-app-fe
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: kubernetes.io/arch
+                operator: In
+                values:
+                - amd64
+                - arm64
+      
+      containers:
+      - name: fe
+        image: huannv93/udacity-awsdevops-project03-1_frontend
+        resources:
+          requests:
+            cpu: 500m
+        ports:
+          - name: http
+            containerPort: 3000
+        imagePullPolicy: IfNotPresent
+        env:
+         - name: API_URL
+           valueFrom:
+             configMapKeyRef:
+               name: myconfigmap
+               key: API_URL
+      nodeSelector:
+        kubernetes.io/os: linux
+        
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend-service
+  namespace: eks-udacity-app
+  labels:
+    app: eks-udacity-app-fe
+spec:
+  type: LoadBalancer
+  selector:
+    app:  eks-udacity-app-fe
+  ports:
+      - port: 3000
+        targetPort: 3000
+        protocol: TCP

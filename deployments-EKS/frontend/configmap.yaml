@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: myconfigmap
+  namespace: eks-udacity-app
+data:
+  API_URL : https://api-web.huannguyen99999999999999.info:3030
