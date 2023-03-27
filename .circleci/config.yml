@@ -187,8 +187,8 @@ jobs:
           command: |
             if [ "${CIRCLE_BRANCH}" == "main" ]; then
               echo "$DOCKER_PASS" | docker login --username $DOCKER_USER --password $DOCKER_PASS
-              docker tag app "huannv93/udacity-awsdevops-project03-1_frontend:${CIRCLE_SHA1}"
-              docker tag app "huannv93/udacity-awsdevops-project03-1_backend:${CIRCLE_SHA1}"
+              docker tag huannv93/udacity-awsdevops-project03-1_frontend "huannv93/udacity-awsdevops-project03-1_frontend:${CIRCLE_SHA1}"
+              docker tag huannv93/udacity-awsdevops-project03-1_backend "huannv93/udacity-awsdevops-project03-1_backend:${CIRCLE_SHA1}"
               docker push "huannv93/udacity-awsdevops-project03-1_frontend:${CIRCLE_SHA1}"
               docker push "huannv93/udacity-awsdevops-project03-1_backend:${CIRCLE_SHA1}"
             fi

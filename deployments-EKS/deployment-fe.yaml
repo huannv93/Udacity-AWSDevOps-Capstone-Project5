@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: eks-sample-linux-deployment
-  namespace: eks-sample-app
+  name: frontend-deployment
+  namespace: eks-udacity-app
   labels:
-    app: eks-sample-linux-app
+    app: eks-udacity-app
 spec:
   replicas: 500
   selector:
     matchLabels:
-      app: eks-sample-linux-app
+      app: eks-udacity-app
   template:
     metadata:
       labels:
-        app: eks-sample-linux-app
+        app: eks-udacity-app
     spec:
       affinity:
         nodeAffinity:
@@ -27,11 +27,11 @@ spec:
                 - arm64
       
       containers:
-      - name: nginx
+      - name: fe
         image: public.ecr.aws/nginx/nginx:1.21
         resources:
           requests:
-            cpu: 100m
+            cpu: 500m
         ports:
         - name: http
           containerPort: 80
