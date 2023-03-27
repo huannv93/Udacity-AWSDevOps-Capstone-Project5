@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: frontend-deployment
+  name: backend-deployment
   namespace: eks-udacity-app
   labels:
-    app: eks-udacity-app
+    app: eks-udacity-app-be
 spec:
-  replicas: 500
+  replicas: 1
   selector:
     matchLabels:
-      app: eks-udacity-app
+      app:  eks-udacity-app-be
   template:
     metadata:
       labels:
-        app: eks-udacity-app
+        app: eks-udacity-app-be
     spec:
       affinity:
         nodeAffinity:
@@ -27,14 +27,30 @@ spec:
                 - arm64
       
       containers:
-      - name: fe
-        image: public.ecr.aws/nginx/nginx:1.21
+      - name: be
+        image: huannv93/udacity-awsdevops-project03-1_backend
         resources:
           requests:
             cpu: 500m
         ports:
         - name: http
-          containerPort: 80
+          containerPort: 3030
         imagePullPolicy: IfNotPresent
       nodeSelector:
         kubernetes.io/os: linux
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-service
+  namespace: eks-udacity-app
+  labels:
+    app: eks-udacity-app-be
+spec:
+  type: LoadBalancer
+  selector:
+    app:  eks-udacity-app-be
+  ports:
+      - port: 3030
+        targetPort: 3030
+        protocol: TCP
