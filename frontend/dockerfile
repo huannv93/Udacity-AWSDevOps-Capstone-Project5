@@ -1,6 +1,6 @@
 # base image
 FROM circleci/node:13.8.0
-USER root
+USER node
 # set working directory
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
@@ -13,13 +13,14 @@ ENV PATH /usr/src/app/node_modules/.bin:$PATH
 
 COPY . /usr/src/app/
 
-RUN chown root:root /usr/src/app && \
-    mkdir /.npm && chown root:root /.npm && \
-    mkdir /.config && chown root:root /.config && \
-    mkdir /.cache && chown root:root /.cache && \
-    mkdir /.local && chown root:root /.local
 
-USER root
+RUN chown node:node /usr/src/app && \
+    mkdir /.npm && chown node:node /.npm && \
+    mkdir /.config && chown node:node /.config && \
+    mkdir /.cache && chown node:node /.cache && \
+    mkdir /.local && chown node:node /.local
+
+USER node
 
 RUN npm install
 #RUN npx browserslist@latest --update-db
