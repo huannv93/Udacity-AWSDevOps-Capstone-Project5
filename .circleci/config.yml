@@ -1,40 +1,35 @@
 version: 2.1
 
 commands:
-  destroy-environment:
-    description: Destroy back-end and front-end cloudformation stacks given a workflow ID.
-    parameters:
-      workflow_id:
-        type: string  
-    steps:
-      - run:
-          name: Destroy environments
-          when: on_fail
-          command: |
-            aws cloudformation delete-stack \
-            --stack-name udapeople-backend-<<parameters.workflow_id>>
-            aws s3 rm s3://udapeople-<<parameters.workflow_id>> --recursive
-            aws cloudformation delete-stack \
-            --stack-name udapeople-frontend-<<parameters.workflow_id>>
 
-  revert-migrations:
-    description: Revert the migration.
-    parameters:
-      workflow_id:
-        type: string
+  rollback-Back-end:
+    description: Rollback to old image tag
     steps:
       - run:
-          name: Revert migrations
+          name: Rollback
           when: on_fail
           command: |
-            SUCCESS=$(curl --insecure https://kvdb.io/UpSvCVKsMipzyF5tpkxdPQ/migration_<< parameters.workflow_id >>)
-            if [[ "${SUCCESS}" == "1" ]]
-            then
-                cd ~/project/backend
-                npm install
-                npm run migration:revert
-            fi
-            
+            curl -O https://s3.us-west-2.amazonaws.com/amazon-eks/1.23.16/2023-01-30/bin/linux/amd64/kubectl
+            chmod +x ./kubectl
+            mkdir -p $HOME/bin && cp ./kubectl $HOME/bin/kubectl && export PATH=$PATH:$HOME/bin
+            kubectl version --short --client
+
+            export commitID_OLD=$(git rev-parse --short HEAD~1)
+            kubectl set image deployment/backend-deployment be=huannv93/udacity-awsdevops-project03-1_backend:${commitID_OLD} -n eks-udacity-app
+  rollback-Front-end:
+    description: Rollback to old image tag
+    steps:
+      - run:
+          name: Rollback
+          when: on_fail
+          command: |
+            curl -O https://s3.us-west-2.amazonaws.com/amazon-eks/1.23.16/2023-01-30/bin/linux/amd64/kubectl
+            chmod +x ./kubectl
+            mkdir -p $HOME/bin && cp ./kubectl $HOME/bin/kubectl && export PATH=$PATH:$HOME/bin
+            kubectl version --short --client
+
+            export commitID_OLD=$(git rev-parse --short HEAD~1)
+            kubectl set image deployment/frontend-deployment be=huannv93/udacity-awsdevops-project03-1_frontend:${commitID_OLD} -n eks-udacity-app
 jobs:
   build-frontend:
     docker:
@@ -247,6 +242,42 @@ jobs:
             export commitID=$(git rev-parse --short HEAD)
             kubectl set image deployment/frontend-deployment fe=huannv93/udacity-awsdevops-project03-1_frontend:${commitID} -n eks-udacity-app
 
+
+  smoke-test:
+    docker:
+      - image: python:3.7-alpine3.16
+    steps:
+      - checkout
+      - run:
+          name: Install dependencies
+          command: |
+            apk add --update --no-cache curl nodejs npm aws-cli
+      - run:
+          name: Frontend smoke test.
+          command: |
+            URL="http://a7fee27123817476283f35beae74d90f-139533906.us-east-1.elb.amazonaws.com:3000"            
+            echo ${URL} 
+            if curl -s ${URL} | grep "Welcome"
+            then
+              return 0
+            else
+              return 1
+            fi
+      - run:
+          name: Backend smoke test
+          command: |
+            export API_URL="http://af7805098b91848e59cb858fae815fd8-839165628.us-east-1.elb.amazonaws.com:3030"
+            echo "${API_URL}"
+            if curl "${API_URL}/api/status" | grep "ok"
+            then
+              return 0
+            else
+              return 1
+            fi
+
+      - rollback-Back-end:
+      - rollback-Front-end:
+
 workflows:
   default:
     jobs:
@@ -265,4 +296,6 @@ workflows:
       - images-build
       - deploy-EKS:
           requires: [images-build]
+      - smoke-test:
+          requests: [deploy-EKS]
             
