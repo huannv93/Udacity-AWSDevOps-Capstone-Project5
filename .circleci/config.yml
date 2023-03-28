@@ -229,9 +229,13 @@ jobs:
       - run:
           name: Deploy Backend
           command: |
+            curl -O https://s3.us-west-2.amazonaws.com/amazon-eks/1.23.16/2023-01-30/bin/linux/amd64/kubectl
+            chmod +x ./kubectl
+            mkdir -p $HOME/bin && cp ./kubectl $HOME/bin/kubectl && export PATH=$PATH:$HOME/bin
+            kubectl version --short --client
 
             export commitID=$(git rev-parse --short HEAD)
-            kubectl version --short --client
+            kubectl set image deployment/frontend-deployment be=huannv93/udacity-awsdevops-project03-huannv93/udacity-awsdevops-project03-1_backend:${commitID} -n eks-udacity-app
       - run:
           name: Deploy Backend
           command: |
