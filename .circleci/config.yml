@@ -211,9 +211,9 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Install tar gzip curl
+          name: Install tar gzip curl git
           command: |
-            yum install -y tar gzip curl
+            yum install -y tar gzip curl git
       - run:
           name: Install tar kubectl
           command: |
@@ -229,7 +229,9 @@ jobs:
       - run:
           name: Deploy Backend
           command: |
+
             export commitID=$(git rev-parse --short HEAD)
+            kubectl version --short --client
             kubectl set image deployment/backend-deployment be=huannv93/udacity-awsdevops-project03-1_backend:${commitID} -n eks-udacity-app
       - run:
           name: Deploy Backend
