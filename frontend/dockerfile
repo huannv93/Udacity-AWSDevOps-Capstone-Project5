@@ -1,6 +1,6 @@
 # base image
 FROM circleci/node:13.8.0
-
+USER root
 # set working directory
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
