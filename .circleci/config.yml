@@ -224,8 +224,7 @@ jobs:
       - run:
           name: Authentication with EKS
           command: |
-            aws sts get-caller-identity
-            #aws eks --region $AWS_DEFAULT_REGION update-kubeconfig --name $EKS_CLUSTER_NAME
+            echo $(aws sts get-caller-identity)
       - run:
           name: Deploy Backend
           command: |
