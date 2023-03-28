@@ -170,7 +170,10 @@ jobs:
     steps:
       - checkout
       - setup_remote_docker
-      - run: echo "Commit ID: ${CIRCLE_SHA1: -7}"
+      - run: 
+          name: Get Last 7 Characters of Git Commit ID
+          command: | 
+            echo ${CIRCLE_SHA1: -7}
       - run:
           name: Install dependencies
           command: |
