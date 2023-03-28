@@ -11,11 +11,12 @@ ENV PATH /usr/src/app/root_modules/.bin:$PATH
 # copy the code
 COPY . /usr/src/app/
 
-# create a new user
-RUN adduser --system --home /usr/src/app --no-create-home --shell /bin/false appuser && \
-    chown -R appuser:appuser /usr/src/app && \
+# create a new user and group
+RUN addgroup --system appgroup && \
+    adduser --system --home /usr/src/app --no-create-home --shell /bin/false --ingroup appgroup appuser && \
+    chown -R appuser:appgroup /usr/src/app && \
     mkdir /.npm /.config /.cache /.local && \
-    chown -R appuser:appuser /.npm /.config /.cache /.local
+    chown -R appuser:appgroup /.npm /.config /.cache /.local
 
 # switch to the new user
 USER appuser
