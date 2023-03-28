@@ -291,5 +291,5 @@ workflows:
       - deploy-EKS:
           requires: [images-build]
       - smoke-test:
-          requests: [deploy-EKS]
+          requires: [deploy-EKS]
             
