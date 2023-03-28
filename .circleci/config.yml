@@ -2,7 +2,7 @@ version: 2.1
 
 commands:
 
-  rollback-Backend:
+  rollback_Backend:
     description: Rollback to old image tag
     steps:
       - run:
@@ -16,7 +16,7 @@ commands:
 
             export commitID_OLD=$(git rev-parse --short HEAD~1)
             kubectl set image deployment/backend-deployment be=huannv93/udacity-awsdevops-project03-1_backend:${commitID_OLD} -n eks-udacity-app
-  rollback-Frontend:
+  rollback_Frontend:
     description: Rollback to old image tag
     steps:
       - run:
@@ -269,8 +269,8 @@ jobs:
             else
               return 1
             fi
-      - rollback-Backend:
-      - rollback-Frontend:
+      - rollback_Backend:
+      - rollback_Frontend:
 
 
 
