@@ -260,13 +260,12 @@ jobs:
       - run:
           name: Frontend smoke test.
           command: |
-            URL="http://a7fee27123817476283f35beae74d90f-139533906.us-east-1.elb.amazonaws.com:3000"            
-            echo ${URL} 
+            export URL="http://a7fee27123817476283f35beae74d90f-139533906.us-east-1.elb.amazonaws.com:3000"            
             if curl -s ${URL} | grep "Welcome"
             then
-              return 0
+              exit 0
             else
-              return 1
+              exit 1
             fi
       - run:
           name: Backend smoke test
