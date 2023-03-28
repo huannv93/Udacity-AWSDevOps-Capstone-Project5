@@ -166,7 +166,7 @@ jobs:
           command: |
             cd backend
             make lint
-  images-build:
+  build-image:
     docker:
       - image: docker:17.05.0-ce-git
         # auth:
@@ -301,9 +301,10 @@ workflows:
           requires: [build-frontend]
       - dockerfile-lint-back-end
       - dockerfile-lint-front-end
-      - images-build
+      - build-image:
+         requires: [dockerfile-lint-back-end, dockerfile-lint-front-end, test-backend, test-frontend, scan-frontend, scan-backend]
       - deploy-EKS:
-          requires: [images-build]
+          requires: [build-image]
       - smoke-test:
           requires: [deploy-EKS]
             
