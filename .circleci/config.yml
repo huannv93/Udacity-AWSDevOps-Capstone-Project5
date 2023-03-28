@@ -173,7 +173,7 @@ jobs:
       - run: 
           name: Get Last 7 Characters of Git Commit ID
           command: | 
-            echo ${CIRCLE_SHA1: -7}
+            echo ${CIRCLE_SHA1:-7}
       - run:
           name: Install dependencies
           command: |
