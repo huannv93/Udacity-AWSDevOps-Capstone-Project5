@@ -269,8 +269,8 @@ jobs:
             else
               return 1
             fi
-      - rollback_backend:
-      - rollback_frontend:
+      # - rollback_backend:
+      # - rollback_frontend:
 
 
 
