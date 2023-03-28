@@ -235,7 +235,7 @@ jobs:
             kubectl version --short --client
 
             export commitID=$(git rev-parse --short HEAD)
-            kubectl set image deployment/frontend-deployment be=huannv93/udacity-awsdevops-project03-huannv93/udacity-awsdevops-project03-1_backend:${commitID} -n eks-udacity-app
+            kubectl set image deployment/backend-deployment be=huannv93/udacity-awsdevops-project03-huannv93/udacity-awsdevops-project03-1_backend:${commitID} -n eks-udacity-app
       - run:
           name: Deploy Backend
           command: |
