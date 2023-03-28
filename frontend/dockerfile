@@ -1,37 +1,27 @@
 # base image
 FROM circleci/node:13.8.0
-USER root
+
 # set working directory
-RUN sudo mkdir -p /usr/src/app
+RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 
 # add `/usr/src/app/root_modules/.bin` to $PATH
 ENV PATH /usr/src/app/root_modules/.bin:$PATH
 
-# RUN apk update && apk upgrade && \
-#     apk add --no-cache bash git openssh
-
+# copy the code
 COPY . /usr/src/app/
 
+# create a new user
+RUN adduser --system --home /usr/src/app --no-create-home --shell /bin/false appuser && \
+    chown -R appuser:appuser /usr/src/app && \
+    mkdir /.npm /.config /.cache /.local && \
+    chown -R appuser:appuser /.npm /.config /.cache /.local
 
-RUN chown root:root /usr/src/app && \
-    mkdir /.npm && chown root:root /.npm && \
-    mkdir /.config && chown root:root /.config && \
-    mkdir /.cache && chown root:root /.cache && \
-    mkdir /.local && chown root:root /.local
-
-USER root
+# switch to the new user
+USER appuser
 
 RUN npm install
-#RUN npx browserslist@latest --update-db
-#RUN npm install --save-dev html-webpack-plugin@3
-#RUN npm update
-#RUN npm update
-#RUN npm audit fix --audit-level=critical --force
-#RUN npm audit fix --audit-level=critical --force
-#RUN npm audit --audit-level=critical
 
-#EXPOSE 3000
 # start app
 CMD ["npm", "run", "start"]
 EXPOSE 3000
