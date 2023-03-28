@@ -237,8 +237,13 @@ jobs:
             export commitID=$(git rev-parse --short HEAD)
             kubectl set image deployment/backend-deployment be=huannv93/udacity-awsdevops-project03-huannv93/udacity-awsdevops-project03-1_backend:${commitID} -n eks-udacity-app
       - run:
-          name: Deploy Backend
+          name: Deploy Frontend
           command: |
+            curl -O https://s3.us-west-2.amazonaws.com/amazon-eks/1.23.16/2023-01-30/bin/linux/amd64/kubectl
+            chmod +x ./kubectl
+            mkdir -p $HOME/bin && cp ./kubectl $HOME/bin/kubectl && export PATH=$PATH:$HOME/bin
+            kubectl version --short --client
+
             export commitID=$(git rev-parse --short HEAD)
             kubectl set image deployment/frontend-deployment fe=huannv93/udacity-awsdevops-project03-1_frontend:${commitID} -n eks-udacity-app
 
@@ -258,6 +263,6 @@ workflows:
       - dockerfile-lint-back-end
       - dockerfile-lint-front-end
       - images-build
-      - deploy-EKS
-          # requires: [images-build]
+      - deploy-EKS:
+          requires: [images-build]
             
