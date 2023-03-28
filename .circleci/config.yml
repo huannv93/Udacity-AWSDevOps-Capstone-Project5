@@ -196,10 +196,6 @@ jobs:
               docker push huannv93/udacity-awsdevops-project03-1_backend:${commitID}
             fi
 
-
-
-
-
   deploy-EKS:
     docker:
       - image: amazon/aws-cli
@@ -242,7 +238,6 @@ jobs:
             export commitID=$(git rev-parse --short HEAD)
             kubectl set image deployment/frontend-deployment fe=huannv93/udacity-awsdevops-project03-1_frontend:${commitID} -n eks-udacity-app
 
-
   smoke-test:
     docker:
       - image: python:3.7-alpine3.16
@@ -275,8 +270,7 @@ jobs:
               return 1
             fi
 
-      - rollback-Back-end:
-      - rollback-Front-end:
+
 
 workflows:
   default:
