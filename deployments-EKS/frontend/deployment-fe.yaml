@@ -28,7 +28,7 @@ spec:
       
       containers:
       - name: fe
-        image: huannv93/udacity-awsdevops-project03-1_frontend:126
+        image: huannv93/udacity-awsdevops-project03-1_frontend:04f26a1
         resources:
           requests:
             cpu: 500m
