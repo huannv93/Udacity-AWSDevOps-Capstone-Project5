@@ -190,6 +190,7 @@ jobs:
       - deploy:
           name: Push application Docker image
           command: |
+            export commitID=$(git rev-parse --short HEAD)
             echo ${commitID}
             
             if [ "${CIRCLE_BRANCH}" == "main" ]; then
