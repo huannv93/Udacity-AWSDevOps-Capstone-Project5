@@ -39,7 +39,7 @@ commands:
             aws eks --region $AWS_DEFAULT_REGION update-kubeconfig --name $EKS_CLUSTER_NAME
 
             export commitID_OLD=$(git rev-parse --short HEAD~1)
-            kubectl set image deployment/frontend-deployment be=huannv93/udacity-awsdevops-project03-1_frontend:${commitID_OLD} -n eks-udacity-app
+            kubectl set image deployment/frontend-deployment fe=huannv93/udacity-awsdevops-project03-1_frontend:${commitID_OLD} -n eks-udacity-app
 jobs:
   build-frontend:
     docker:
