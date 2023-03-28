@@ -1,35 +1,35 @@
 version: 2.1
 
-# commands:
+commands:
 
-#   rollback-Back-end:
-#     description: Rollback to old image tag
-#     steps:
-#       - run:
-#           name: Rollback
-#           when: on_fail
-#           command: |
-#             curl -O https://s3.us-west-2.amazonaws.com/amazon-eks/1.23.16/2023-01-30/bin/linux/amd64/kubectl
-#             chmod +x ./kubectl
-#             mkdir -p $HOME/bin && cp ./kubectl $HOME/bin/kubectl && export PATH=$PATH:$HOME/bin
-#             kubectl version --short --client
+  rollback-Backend:
+    description: Rollback to old image tag
+    steps:
+      - run:
+          name: Rollback
+          when: on_fail
+          command: |
+            curl -O https://s3.us-west-2.amazonaws.com/amazon-eks/1.23.16/2023-01-30/bin/linux/amd64/kubectl
+            chmod +x ./kubectl
+            mkdir -p $HOME/bin && cp ./kubectl $HOME/bin/kubectl && export PATH=$PATH:$HOME/bin
+            kubectl version --short --client
 
-#             export commitID_OLD=$(git rev-parse --short HEAD~1)
-#             kubectl set image deployment/backend-deployment be=huannv93/udacity-awsdevops-project03-1_backend:${commitID_OLD} -n eks-udacity-app
-#   rollback-Front-end:
-#     description: Rollback to old image tag
-#     steps:
-#       - run:
-#           name: Rollback
-#           when: on_fail
-#           command: |
-#             curl -O https://s3.us-west-2.amazonaws.com/amazon-eks/1.23.16/2023-01-30/bin/linux/amd64/kubectl
-#             chmod +x ./kubectl
-#             mkdir -p $HOME/bin && cp ./kubectl $HOME/bin/kubectl && export PATH=$PATH:$HOME/bin
-#             kubectl version --short --client
+            export commitID_OLD=$(git rev-parse --short HEAD~1)
+            kubectl set image deployment/backend-deployment be=huannv93/udacity-awsdevops-project03-1_backend:${commitID_OLD} -n eks-udacity-app
+  rollback-Frontend:
+    description: Rollback to old image tag
+    steps:
+      - run:
+          name: Rollback
+          when: on_fail
+          command: |
+            curl -O https://s3.us-west-2.amazonaws.com/amazon-eks/1.23.16/2023-01-30/bin/linux/amd64/kubectl
+            chmod +x ./kubectl
+            mkdir -p $HOME/bin && cp ./kubectl $HOME/bin/kubectl && export PATH=$PATH:$HOME/bin
+            kubectl version --short --client
 
-#             export commitID_OLD=$(git rev-parse --short HEAD~1)
-#             kubectl set image deployment/frontend-deployment be=huannv93/udacity-awsdevops-project03-1_frontend:${commitID_OLD} -n eks-udacity-app
+            export commitID_OLD=$(git rev-parse --short HEAD~1)
+            kubectl set image deployment/frontend-deployment be=huannv93/udacity-awsdevops-project03-1_frontend:${commitID_OLD} -n eks-udacity-app
 jobs:
   build-frontend:
     docker:
@@ -269,6 +269,8 @@ jobs:
             else
               return 1
             fi
+      - rollback-Backend:
+      - rollback-Frontend:
 
 
 
